@@ -1,19 +1,17 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 import os
-import socket
 import sys
 import unittest
-from contextlib import contextmanager
 
 source_dir = os.path.join(os.path.dirname(__file__), 'source')
 sys.path.insert(0, source_dir)
 
-from MainTestCase import MainTestCase
+from tests.create_topic_test_case import CreateTopicTestCase
 
 if __name__ == '__main__':
     suite = unittest.TestSuite((
-        unittest.makeSuite(MainTestCase),
+        unittest.makeSuite(CreateTopicTestCase),
     ))
     result = unittest.TextTestRunner().run(suite)
     sys.exit(not result.wasSuccessful())
