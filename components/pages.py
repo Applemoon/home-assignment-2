@@ -62,3 +62,10 @@ class TopicPage(Page):
 class BlogPage(Page):
     def get_topic(self):
         return Topic(self.driver)
+
+
+class DraftPage(Page):
+    PATH = '/blog/topics/draft/'
+
+    def get_topic(self):
+        return Topic(self.driver)
