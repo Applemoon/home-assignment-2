@@ -1,7 +1,10 @@
 import os
 import urlparse
+
 from selenium.webdriver.support.wait import WebDriverWait
+
 from components.page_components import AuthForm, CreateForm, Component, Topic
+import config
 
 
 class Page(object):
@@ -27,14 +30,11 @@ class AuthPage(Page):
         return TopMenu(self.driver)
 
     def authorize(self):
-        login = 'ftest10@tech-mail.ru'
-        password = os.environ['TTHA2PASSWORD']
-
         self.open()
         auth_form = self.get_form()
         auth_form.open_form()
-        auth_form.set_login(login)
-        auth_form.set_password(password)
+        auth_form.set_login(config.login)
+        auth_form.set_password(config.password)
         auth_form.submit()
 
 
