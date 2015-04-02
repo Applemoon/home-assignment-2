@@ -19,6 +19,8 @@ class DifferentTopicsTestCase(unittest.TestCase):
         self.auth_page.authorize()
 
         self.topic_page = TopicPage(self.driver)
+        self.blog_page = BlogPage(self.driver)
+        self.draft_page = DraftPage(self.driver)
 
     def tearDown(self):
         self.driver.quit()
@@ -37,23 +39,30 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.submit()
 
         topic_title = self.topic_page.get_topic().get_title()
-        self.assertEqual(config.title, topic_title)
         topic_text = self.topic_page.get_topic().get_text()
-        self.assertEqual(config.main_text, topic_text)
+        try:
+            self.assertEqual(config.title, topic_title)
+            self.assertEqual(config.main_text, topic_text)
+        except AssertionError:
+            self.topic_page.get_topic().delete()
+            raise AssertionError
 
         self.topic_page.get_topic().open_blog()
 
-        blog_page = BlogPage(self.driver)
-        topic_title = blog_page.get_topic().get_title()
-        self.assertEqual(config.title, topic_title)
-        topic_text = blog_page.get_topic().get_text()
-        self.assertEqual(config.short_text, topic_text)
+        topic_title = self.blog_page.get_topic().get_title()
+        topic_text = self.blog_page.get_topic().get_text()
+        try:
+            self.assertEqual(config.title, topic_title)
+            self.assertEqual(config.short_text, topic_text)
+        except AssertionError:
+            self.blog_page.get_topic().delete()
+            raise AssertionError
 
-        blog_page.get_topic().delete()
+        self.blog_page.get_topic().delete()
 
-        topic_title = blog_page.get_topic().get_title()
+        topic_title = self.blog_page.get_topic().get_title()
+        topic_text = self.blog_page.get_topic().get_text()
         self.assertNotEqual(config.title, topic_title)
-        topic_text = blog_page.get_topic().get_text()
         self.assertNotEqual(config.short_text, topic_text)
 
     def test_create_topic_with_voting(self):
@@ -71,7 +80,11 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.submit()
 
         has_answers = self.topic_page.get_topic().has_answers(answers[0], answers[1])
-        self.assertTrue(has_answers)
+        try:
+            self.assertTrue(has_answers)
+        except AssertionError:
+            self.topic_page.get_topic().delete()
+            raise AssertionError
 
         self.topic_page.get_topic().delete()
 
@@ -87,7 +100,11 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.mark_without_comments()
         create_form.submit()
 
-        self.assertFalse(self.topic_page.get_topic().has_comments())
+        try:
+            self.assertFalse(self.topic_page.get_topic().has_comments())
+        except AssertionError:
+            self.topic_page.get_topic().delete()
+            raise AssertionError
 
         self.topic_page.get_topic().delete()
 
@@ -104,24 +121,35 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.submit()
 
         title = self.topic_page.get_topic().get_title()
-        self.assertEqual(config.title, title)
         text = self.topic_page.get_topic().get_text()
-        self.assertEqual(config.main_text, text)
+        try:
+            self.assertEqual(config.title, title)
+            self.assertEqual(config.main_text, text)
+        except AssertionError:
+            self.topic_page.get_topic().delete()
+            raise AssertionError
 
-        draft_page = DraftPage(self.driver)
-        draft_page.open()
+        self.draft_page.open()
 
-        title = draft_page.get_topic().get_title()
-        self.assertEqual(config.title, title)
-        text = draft_page.get_topic().get_text()
-        self.assertEqual(config.short_text, text)
+        title = self.draft_page.get_topic().get_title()
+        text = self.draft_page.get_topic().get_text()
+        try:
+            self.assertEqual(config.title, title)
+            self.assertEqual(config.short_text, text)
+        except AssertionError:
+            self.draft_page.get_topic().delete()
+            raise AssertionError
 
-        draft_page.get_topic().open_blog()
+        self.draft_page.get_topic().open_blog()
 
         blog_page = BlogPage(self.driver)
         title = blog_page.get_topic().get_title()
-        self.assertNotEqual(config.title, title)
         text = blog_page.get_topic().get_text()
-        self.assertNotEqual(config.short_text, text)
+        try:
+            self.assertNotEqual(config.title, title)
+            self.assertNotEqual(config.short_text, text)
+        except AssertionError:
+            blog_page.get_topic().delete()
+            raise AssertionError
 
         blog_page.get_topic().delete()
