@@ -20,7 +20,6 @@ class DifferentTopicsTestCase(unittest.TestCase):
 
         self.topic_page = TopicPage(self.driver)
         self.blog_page = BlogPage(self.driver)
-        self.draft_page = DraftPage(self.driver)
 
     def tearDown(self):
         self.driver.quit()
@@ -129,18 +128,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
             self.topic_page.get_topic().delete()
             raise AssertionError
 
-        self.draft_page.open()
-
-        title = self.draft_page.get_topic().get_title()
-        text = self.draft_page.get_topic().get_text()
-        try:
-            self.assertEqual(config.title, title)
-            self.assertEqual(config.short_text, text)
-        except AssertionError:
-            self.draft_page.get_topic().delete()
-            raise AssertionError
-
-        self.draft_page.get_topic().open_blog()
+        self.topic_page.get_topic().open_blog()
 
         blog_page = BlogPage(self.driver)
         title = blog_page.get_topic().get_title()
@@ -152,4 +140,16 @@ class DifferentTopicsTestCase(unittest.TestCase):
             blog_page.get_topic().delete()
             raise AssertionError
 
-        blog_page.get_topic().delete()
+        draft_page = DraftPage(self.driver)
+        draft_page.open()
+
+        title = draft_page.get_topic().get_title()
+        text = draft_page.get_topic().get_text()
+        try:
+            self.assertEqual(config.title, title)
+            self.assertEqual(config.short_text, text)
+        except AssertionError:
+            draft_page.get_topic().delete()
+            raise AssertionError
+
+        draft_page.get_topic().delete()
