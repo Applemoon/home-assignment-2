@@ -33,15 +33,14 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.blog_select_open()
         create_form.blog_select_set_option(config.blog)
         create_form.set_title(config.title)
-        create_form.set_short_text(config.short_text)
-        create_form.set_main_text(config.main_text)
+        create_form.set_text(config.topic_text)
         create_form.submit()
 
         topic_title = self.topic_page.get_topic().get_title()
         topic_text = self.topic_page.get_topic().get_text()
         try:
             self.assertEqual(config.title, topic_title)
-            self.assertEqual(config.main_text, topic_text)
+            self.assertEqual(config.topic_text, topic_text)
         except AssertionError:
             self.topic_page.get_topic().delete()
             raise AssertionError
@@ -52,7 +51,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         topic_text = self.blog_page.get_topic().get_text()
         try:
             self.assertEqual(config.title, topic_title)
-            self.assertEqual(config.short_text, topic_text)
+            self.assertEqual(config.topic_text, topic_text)
         except AssertionError:
             self.blog_page.get_topic().delete()
             raise AssertionError
@@ -62,7 +61,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         topic_title = self.blog_page.get_topic().get_title()
         topic_text = self.blog_page.get_topic().get_text()
         self.assertNotEqual(config.title, topic_title)
-        self.assertNotEqual(config.short_text, topic_text)
+        self.assertNotEqual(config.topic_text, topic_text)
 
     def test_create_topic_with_voting(self):
         answers = (u'Ответ1', u'Ответ2')
@@ -72,8 +71,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.blog_select_open()
         create_form.blog_select_set_option(config.blog)
         create_form.set_title(config.title)
-        create_form.set_short_text(config.short_text)
-        create_form.set_main_text(config.main_text)
+        create_form.set_text(config.topic_text)
         create_form.mark_voting()
         create_form.set_voting(u'Текст вопроса', answers[0], answers[1])
         create_form.submit()
@@ -94,8 +92,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.blog_select_open()
         create_form.blog_select_set_option(config.blog)
         create_form.set_title(config.title)
-        create_form.set_short_text(config.short_text)
-        create_form.set_main_text(config.main_text)
+        create_form.set_text(config.topic_text)
         create_form.mark_without_comments()
         create_form.submit()
 
@@ -114,8 +111,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         create_form.blog_select_open()
         create_form.blog_select_set_option(config.blog)
         create_form.set_title(config.title)
-        create_form.set_short_text(config.short_text)
-        create_form.set_main_text(config.main_text)
+        create_form.set_text(config.topic_text)
         create_form.unmark_publish()
         create_form.submit()
 
@@ -123,7 +119,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         text = self.topic_page.get_topic().get_text()
         try:
             self.assertEqual(config.title, title)
-            self.assertEqual(config.main_text, text)
+            self.assertEqual(config.topic_text, text)
         except AssertionError:
             self.topic_page.get_topic().delete()
             raise AssertionError
@@ -135,7 +131,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         text = blog_page.get_topic().get_text()
         try:
             self.assertNotEqual(config.title, title)
-            self.assertNotEqual(config.short_text, text)
+            self.assertNotEqual(config.topic_text, text)
         except AssertionError:
             blog_page.get_topic().delete()
             raise AssertionError
@@ -147,7 +143,7 @@ class DifferentTopicsTestCase(unittest.TestCase):
         text = draft_page.get_topic().get_text()
         try:
             self.assertEqual(config.title, title)
-            self.assertEqual(config.short_text, text)
+            self.assertEqual(config.topic_text, text)
         except AssertionError:
             draft_page.get_topic().delete()
             raise AssertionError
