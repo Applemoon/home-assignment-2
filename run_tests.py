@@ -13,7 +13,7 @@ sys.path.insert(0, source_dir)
 
 if __name__ == '__main__':
     suite = unittest.TestSuite((
-        # unittest.makeSuite(DifferentTopicsTestCase), TODO
+        unittest.makeSuite(DifferentTopicsTestCase),
         unittest.makeSuite(DifferentTextTestCase),
     ))
     result = unittest.TextTestRunner().run(suite)
